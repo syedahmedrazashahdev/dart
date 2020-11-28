@@ -1,0 +1,117 @@
+import 'dart:io';
+
+main() {
+  // Crud list
+  List list = [];
+
+  // admin login info
+  var username = "admin";
+  var password = "1234";
+
+  // login
+  bool login() {
+    print("Login");
+    print("Username:");
+    var get_username = stdin.readLineSync();
+    print("Password:");
+    var get_password = stdin.readLineSync();
+    username;
+    if (get_username == username && get_password == password) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  // operation function
+  void start() {
+    if (login()) { // if login() return true then it execute !
+      while (true) {
+        print(
+            "You can do -> a: Add, r: Read, u: Update, d: Delete, c: Clear, e: Exit");
+        print("------------");
+        var operation = stdin.readLineSync();
+        if (operation == "exit" || operation == "e") {
+          var confirm = confirm_dialog("Are you want to exit (y, n)");
+          if (confirm) {
+            break;
+          }
+        } else {
+          switch (operation) {
+            case "a":
+              print("Status: \"Add\"");
+              var create = stdin.readLineSync();
+              list.add(create);
+              print("$create added successfully!");
+              break;
+            case "r":
+              print("Status: \"Read\"");
+              if (list.isNotEmpty) {
+                list.forEach((element) {
+                  print(element);
+                });
+              } else {
+                print("Sorry your list is empty !");
+              }
+              break;
+            case "u":
+              print("Status: \"Update\"");
+              print("Old Data");
+              var old_data = stdin.readLineSync();
+              if (list.contains(old_data)) {
+                print("New Data");
+                var new_data = stdin.readLineSync();
+                var index = list.indexOf(old_data);
+                list[index] = new_data;
+                print("$new_data updated successfully!");
+              } else {
+                print("Sorry: $old_data does not exists");
+              }
+              break;
+            case "d":
+              print("Status: \"Delete\"");
+              var delete_data = stdin.readLineSync();
+              if (list.contains(delete_data)) {
+                var confirm = confirm_dialog(
+                    "Are you want to delete $delete_data (y, n)");
+                if (confirm) {
+                  list.remove(delete_data);
+                  print("$delete_data deleted successfully!");
+                }
+              } else {
+                print("Sorry $delete_data does not exists");
+              }
+              break;
+            case "c":
+              print("Status \"Clear\"");
+              var confirm =
+                  confirm_dialog("Are you want to clear your list (y, n)");
+              if (confirm) {
+                list.clear();
+                print("your list clear successfully!");
+              }
+              break;
+            default:
+              print("$operation is Not Available !");
+          }
+        }
+      }
+    } else {
+      print("Username of password should be correct !");
+      start();
+    }
+  }
+
+  start();
+}
+
+// Confirm dialog
+bool confirm_dialog(message) {
+  print(message);
+  var confirm = stdin.readLineSync();
+  if (confirm == "y") {
+    return true;
+  } else {
+    return false;
+  }
+}
